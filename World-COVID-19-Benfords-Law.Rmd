@@ -1,0 +1,43 @@
+---
+title: "US COVID-19 Benfords Law"
+author: "David Jackson"
+date: "11/22/2020"
+output: 
+  html_document: 
+    fig_width: 9
+    fig_height: 7
+---
+
+```{r setup,echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(benford.analysis)
+library(RSQLite)
+library(ggplot2)
+library(scales)
+
+```
+
+### Benford's Law with Package: BenfordTests
+
+```{r}
+rm(list=ls())
+db <- db <- dbConnect(RSQLite::SQLite(),dbname= "../COVIDDB/COVID.sqlite3")
+df <- dbGetQuery(db,"select geoID,Cases,Deaths from ECDC")
+df <- subset(df,geoID=="US")
+```
+
+#### Generates benford object First Digit: Daily Cases
+
+```{r}
+X <- cp <- benford(df$Cases,1,sign="both")
+plot(X,multiple=FALSE)
+```
+
+#### Generates benford object First Digit: Daily Deaths
+
+```{r}
+Y  <- benford(df$Deaths,1,sign="both")
+plot(Y,multiple=FALSE)
+
+```
+

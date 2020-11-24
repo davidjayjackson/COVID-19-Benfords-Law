@@ -1,0 +1,45 @@
+---
+title: "US COVID-19 Benford's Law"
+author: "David Jackson"
+date: "11/22/2020"
+output: 
+  html_document: 
+    fig_width: 9
+    fig_height: 7
+---
+
+```{r setup, includtheme_set(theme_linedraw() + theme(panel.grid = element_line(linetype = 'dashed')))e=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(benford.analysis)
+library(ggplot2)
+library(scales)
+
+```
+
+### Benford's Law with Package: BenfordTests
+
+```{r}
+rm(list=ls())
+df <- read.csv("./us_counties.csv")
+df <- subset(df,state=="New York")
+```
+
+#### Generates benford object First Digit: Daily Cases
+
+```{r}
+
+X <- cp <- benford(df$new_cases,1,sign="both")
+plot(X,multiple=FALSE)
+
+```
+
+
+#### Generates benford object First Digit: Daily Deaths
+
+```{r}
+
+Y  <- benford(df$new_deaths,1,sign="both")
+plot(Y,multiple=FALSE)
+
+```
+
