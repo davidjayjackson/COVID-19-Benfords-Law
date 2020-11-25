@@ -1,7 +1,7 @@
 ---
-title: "US COVID-19 Benfords Law"
+title: "The World COVID-19 Benfords Law"
 author: "David Jackson"
-date: "11/22/2020"
+date: "11/25/2020"
 output: 
   html_document: 
     fig_width: 9
@@ -14,6 +14,7 @@ library(benford.analysis)
 library(RSQLite)
 library(ggplot2)
 library(scales)
+library(dplyr)
 
 ```
 
@@ -23,13 +24,13 @@ library(scales)
 rm(list=ls())
 db <- db <- dbConnect(RSQLite::SQLite(),dbname= "../COVIDDB/COVID.sqlite3")
 df <- dbGetQuery(db,"select geoID,Cases,Deaths from ECDC")
-df <- subset(df,geoID=="US")
+df <- subset(df,geoID=="CN")
 ```
 
 #### Generates benford object First Digit: Daily Cases
 
 ```{r}
-X <- cp <- benford(df$Cases,1,sign="both")
+X  <- benford(df$Cases,1,sign="both")
 plot(X,multiple=FALSE)
 ```
 
@@ -41,3 +42,18 @@ plot(Y,multiple=FALSE)
 
 ```
 
+```{r}
+bfd_cases <- X$bfd
+ggplot(bfd_cases) + geom_col(aes(x=digits,y=data.dist,col="Actual")) +
+geom_line(aes(x=digits,y=benford.dist,col="Benford")) +
+  labs(title="Bonford's Analysis: Actual vs Benfords Percents") +
+  scale_y_continuous(labels = percent)
+```
+
+```{r}
+bfd_deaths <- Y$bfd
+ggplot(bfd_deaths) + geom_col(aes(x=digits,y=data.dist,col="Actual")) +
+geom_line(aes(x=digits,y=benford.dist,col="Benford")) +
+  labs(title="Bonford's Analysis: Actual vs Benfords Percents") +
+  scale_y_continuous(labels = percent)
+```

@@ -1,7 +1,7 @@
 ---
 title: "US COVID-19 Benford's Law"
 author: "David Jackson"
-date: "11/22/2020"
+date: "11/25/2020"
 output: 
   html_document: 
     fig_width: 9
