@@ -8,7 +8,7 @@ output:
     fig_height: 7
 ---
 
-```{r setup, includtheme_set(theme_linedraw() + theme(panel.grid = element_line(linetype = 'dashed')))e=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(benford.analysis)
 library(ggplot2)
@@ -21,14 +21,25 @@ library(scales)
 ```{r}
 rm(list=ls())
 df <- read.csv("./us_counties.csv")
-df <- subset(df,state=="New York")
 ```
+
+#### Mean Absolute Deviation (MAD) 
+
+```{r}
+X <- cp <- benford(df$new_cases,1)
+MAD(X) # MAD CAses
+
+Y  <- benford(df$new_deaths,1)
+
+MAD(Y) # MAD Deaths
+```
+
+
 
 #### Generates benford object First Digit: Daily Cases
 
 ```{r}
 
-X <- cp <- benford(df$new_cases,1,sign="both")
 plot(X,multiple=FALSE)
 
 ```
@@ -38,7 +49,7 @@ plot(X,multiple=FALSE)
 
 ```{r}
 
-Y  <- benford(df$new_deaths,1,sign="both")
+
 plot(Y,multiple=FALSE)
 
 ```
