@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup,echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE,message = FALSE)
 library(benford.analysis)
 library(RSQLite)
 library(ggplot2)
@@ -18,19 +18,27 @@ library(dplyr)
 
 ```
 
-### Benford's Law with Package: BenfordTests
+### Benford's Law with  benford.analysis Package
 
 ```{r}
 rm(list=ls())
 db <- db <- dbConnect(RSQLite::SQLite(),dbname= "../COVIDDB/COVID.sqlite3")
 df <- dbGetQuery(db,"select geoID,Cases,Deaths from ECDC")
 df <- subset(df,geoID=="CN")
+dbDisconnect(db)
 ```
 
 #### Generates benford object First Digit: Daily Cases
 
 ```{r}
 X  <- benford(df$Cases,1,sign="both")
+plot(X,multiple=FALSE)
+```
+
+### First Two Digit : Daily Cases
+
+```{r}
+X  <- benford(df$Cases,2,sign="both")
 plot(X,multiple=FALSE)
 ```
 
@@ -41,6 +49,17 @@ Y  <- benford(df$Deaths,1,sign="both")
 plot(Y,multiple=FALSE)
 
 ```
+
+#### First Two Digits: Deaths
+
+
+```{r}
+Y  <- benford(df$Deaths,2,sign="both")
+plot(Y,multiple=FALSE)
+
+```
+
+#### Percentages for First Digit Cases and Deaths
 
 ```{r}
 bfd_cases <- X$bfd
