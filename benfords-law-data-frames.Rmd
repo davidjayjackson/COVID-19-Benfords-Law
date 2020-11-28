@@ -1,0 +1,74 @@
+---
+title: 'Benfords.Analysis: Data.Frames'
+author: "David Jackson"
+date: "11/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE,message = FALSE)
+library(benford.analysis)
+library(RSQLite)
+library(ggplot2)
+library(scales)
+library(dplyr)
+```
+### Benford's Law with  benford.analysis Package
+
+```{r}
+rm(list=ls())
+db <- db <- dbConnect(RSQLite::SQLite(),dbname= "../COVIDDB/COVID.sqlite3")
+df <- dbGetQuery(db,"select geoID,Cases,Deaths from ECDC")
+df <- subset(df,geoID=="US")
+dbDisconnect(db)
+```
+
+#### Create Benford's Laws,Nested Data Frame: Cases
+
+
+```{r}
+X  <- benford(df$Cases,1,sign="both")
+str(X)
+```
+
+#### Split OUt Data.frames
+
+```{r}
+info <- X$info
+str(info)
+```
+
+```{r}
+data <- X$data
+str(data)
+```
+```{r}
+so_data <- X$s.o.data
+str(so_data)
+```
+```{r}
+bfd <- X$bfd
+str(bfd)
+```
+```{r}
+mantissa <- X$mantissa
+str(mantissa)
+```
+```{r}
+MAD <- X$MAD
+str(MAD)
+```
+```{r}
+MAD_conformity <- X$MAD.conformity
+str(MAD_conformity)
+```
+```{r}
+distortion <- X$distortion.factor
+str(distortion)
+```
+```{r}
+stats <- X$stats
+str(stats)
+```
+
